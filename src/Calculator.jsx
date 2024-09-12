@@ -3,8 +3,8 @@ import styles from "./Calculator.module.css"
 
 const Calculator =() =>{
 
-    const [inputValue, setInputValue] = useState();
-    const [result,setResult] = useState();
+    const [inputValue, setInputValue] = useState("");
+    const [result,setResult] = useState("");
 
     const handleClick =(e)=>{
         setInputValue(inputValue + e)
@@ -15,9 +15,21 @@ const Calculator =() =>{
     } 
     const handleResult =()=>{
         try {
-            setResult(eval(inputValue)); 
-          } catch (error) {
-            setResult("Error");
+            // Evaluate the input expression
+            const evalResult = eval(inputValue);
+      
+            // Check for division by zero and NaN
+            if (inputValue.includes('0/0') && !evalResult) {
+              setResult('NaN')
+            } else if (inputValue.includes('/0') && !evalResult) {
+              setResult('Infinity');
+            } else if (isNaN(evalResult)) {
+              setResult('Error');
+            } else {
+              setResult(evalResult.toString());
+            }
+          } catch {
+            setResult('Error');
           }
     }
     return(
